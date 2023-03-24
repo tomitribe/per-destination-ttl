@@ -2,6 +2,7 @@ package org.tomitribe.perdestttl;
 
 import org.apache.activemq.broker.Broker;
 import org.apache.activemq.broker.BrokerPlugin;
+import org.apache.activemq.security.AuthorizationMap;
 
 public class TTLDestinationPlugin implements BrokerPlugin {
     /**
@@ -35,12 +36,15 @@ public class TTLDestinationPlugin implements BrokerPlugin {
      * if false, and there is no matching policy, bypass the logic in this interceptor
      */
     protected boolean useDefaultIfNoPolicy = true;
+    private TTLDestinationMap map;
+
 
     @Override
     public Broker installPlugin(Broker broker) throws Exception {
 
         return new TTLDestinationBroker(
                 broker,
+                map,
                 zeroExpirationOverride,
                 ttlCeiling,
                 futureOnly,
@@ -87,4 +91,13 @@ public class TTLDestinationPlugin implements BrokerPlugin {
     public void setUseDefaultIfNoPolicy(boolean useDefaultIfNoPolicy) {
         this.useDefaultIfNoPolicy = useDefaultIfNoPolicy;
     }
+
+    public TTLDestinationMap getMap() {
+        return map;
+    }
+
+    public void setMap(TTLDestinationMap map) {
+        this.map = map;
+    }
+
 }

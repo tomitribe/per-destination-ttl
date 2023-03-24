@@ -18,7 +18,6 @@ package org.tomitribe.perdestttl;
 
 import org.apache.activemq.broker.BrokerPlugin;
 import org.apache.activemq.broker.BrokerService;
-import org.apache.activemq.broker.region.policy.PolicyMap;
 import org.apache.activemq.command.ActiveMQTopic;
 import org.junit.Assert;
 import org.junit.Before;
@@ -40,21 +39,21 @@ public class BrokerTTLTest extends BaseTest {
 
         final TTLDestinationPlugin plugin = new TTLDestinationPlugin();
         plugin.setUseDefaultIfNoPolicy(false);
+
+        final TTLDestinationMap map = new TTLDestinationMap();
+        plugin.setMap(map);
+
+        final TTLEntry destOneEntry = new TTLEntry();
+        destOneEntry.setTtlCeiling(5000);
+        destOneEntry.setZeroExpirationOverride(5000);
+        map.put(new ActiveMQTopic("dest1"), destOneEntry);
+
+        final TTLEntry destTwoEntry = new TTLEntry();
+        destTwoEntry.setTtlCeiling(1000);
+        destTwoEntry.setZeroExpirationOverride(1000);
+        map.put(new ActiveMQTopic("dest2"), destTwoEntry);
+
         broker.setPlugins(new BrokerPlugin[] {plugin});
-
-        final PolicyMap policyMap = new PolicyMap();
-        broker.setDestinationPolicy(policyMap);
-
-        final TTLPolicyEntry destOnePolicy = new TTLPolicyEntry();
-        destOnePolicy.setTtlCeiling(5000);
-        destOnePolicy.setZeroExpirationOverride(5000);
-        policyMap.put(new ActiveMQTopic("dest1"), destOnePolicy);
-
-        final TTLPolicyEntry destTwoPolicy = new TTLPolicyEntry();
-        destTwoPolicy.setTtlCeiling(1000);
-        destTwoPolicy.setZeroExpirationOverride(1000);
-        policyMap.put(new ActiveMQTopic("dest2"), destTwoPolicy);
-
         broker.setUseJmx(true);
         broker.start();
     }

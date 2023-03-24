@@ -29,6 +29,7 @@ import org.apache.activemq.broker.util.TimeStampingBrokerPlugin;
 import org.apache.activemq.command.ActiveMQDestination;
 import org.apache.activemq.command.ActiveMQMessage;
 import org.apache.activemq.command.Message;
+import org.apache.activemq.filter.DestinationMapEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,12 +39,14 @@ import org.slf4j.LoggerFactory;
 public class TTLDestinationInterceptor implements DestinationInterceptor {
 
     public TTLDestinationInterceptor(final Broker broker,
+                                     final TTLDestinationMap map,
                                      final long zeroExpirationOverride,
                                      final long ttlCeiling,
                                      final boolean futureOnly,
                                      final boolean processNetworkMessages,
                                      final boolean useDefaultIfNoPolicy) {
         this.broker = broker;
+        this.map = map;
         this.zeroExpirationOverride = zeroExpirationOverride;
         this.ttlCeiling = ttlCeiling;
         this.futureOnly = futureOnly;
@@ -55,6 +58,7 @@ public class TTLDestinationInterceptor implements DestinationInterceptor {
 
     protected final Broker broker;
 
+    private final TTLDestinationMap map;
     /**
      * variable which (when non-zero) is used to override
      * the expiration date for messages that arrive with
@@ -89,12 +93,10 @@ public class TTLDestinationInterceptor implements DestinationInterceptor {
 
     @Override
     public Destination intercept(final Destination destination) {
-
         final ActiveMQDestination activeMQDestination = destination.getActiveMQDestination();
-        final PolicyMap destinationPolicyMap = broker.getBrokerService().getDestinationPolicy();
-        final PolicyEntry policyEntry = destinationPolicyMap.getEntryFor(activeMQDestination);
+        final TTLEntry entry = map.findEntry(activeMQDestination);
 
-        if (! (policyEntry instanceof TTLPolicyEntry)) {
+        if (entry == null) {
             if (useDefaultIfNoPolicy) {
                 return new TimestampingDestinationFilter(
                         destination,
@@ -108,14 +110,12 @@ public class TTLDestinationInterceptor implements DestinationInterceptor {
             }
         }
 
-        final TTLPolicyEntry ttlPE = (TTLPolicyEntry) policyEntry;
-
         return new TimestampingDestinationFilter(
                 destination,
-                ttlPE.isProcessNetworkMessages(),
-                ttlPE.getZeroExpirationOverride(),
-                ttlPE.getTtlCeiling(),
-                ttlPE.isFutureOnly());
+                entry.isProcessNetworkMessages(),
+                entry.getZeroExpirationOverride(),
+                entry.getTtlCeiling(),
+                entry.isFutureOnly());
     }
 
     @Override

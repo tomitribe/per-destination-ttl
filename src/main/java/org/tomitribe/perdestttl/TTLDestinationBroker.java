@@ -11,6 +11,7 @@ import java.util.Arrays;
 public class TTLDestinationBroker extends BrokerFilter {
 
     public TTLDestinationBroker(final Broker next,
+                                final TTLDestinationMap map,
                                 final long zeroExpirationOverride,
                                 final long ttlCeiling,
                                 final boolean futureOnly,
@@ -26,7 +27,8 @@ public class TTLDestinationBroker extends BrokerFilter {
 
         final TTLDestinationInterceptor interceptor =
                 new TTLDestinationInterceptor(
-                        this,
+                         this,
+                                map,
                                 zeroExpirationOverride,
                                 ttlCeiling,
                                 futureOnly,

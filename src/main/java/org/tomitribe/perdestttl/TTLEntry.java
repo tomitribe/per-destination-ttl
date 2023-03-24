@@ -1,9 +1,8 @@
 package org.tomitribe.perdestttl;
 
-import org.apache.activemq.broker.region.policy.PolicyEntry;
+import org.apache.activemq.filter.DestinationMapEntry;
 
-public class TTLPolicyEntry extends PolicyEntry {
-
+public class TTLEntry extends DestinationMapEntry {
     /**
      * variable which (when non-zero) is used to override
      * the expiration date for messages that arrive with
