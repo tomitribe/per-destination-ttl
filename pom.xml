@@ -23,6 +23,12 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>ActiveMQ Per Destination TTL</name>
 
+  <parent>
+    <groupId>org.tomitribe</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>6</version>
+  </parent>
+
   <packaging>jar</packaging>
 
   <dependencies>
