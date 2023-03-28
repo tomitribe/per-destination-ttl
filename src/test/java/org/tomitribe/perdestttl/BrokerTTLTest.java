@@ -63,7 +63,7 @@ public class BrokerTTLTest extends BaseTest {
     }
 
     @Test
-    public void testShouldRouteToToClientAndServiceQueues() throws Exception {
+    public void testTTL() throws Exception {
         final AtomicInteger destOneReceived = new AtomicInteger(0);
         final AtomicInteger destTwoReceived = new AtomicInteger(0);
 
