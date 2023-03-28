@@ -18,7 +18,6 @@ package org.tomitribe.perdestttl;
 
 import org.apache.activemq.broker.Broker;
 import org.apache.activemq.broker.BrokerPlugin;
-import org.apache.activemq.security.AuthorizationMap;
 
 public class TTLDestinationPlugin implements BrokerPlugin {
     /**
