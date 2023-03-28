@@ -31,6 +31,14 @@
 
   <packaging>jar</packaging>
 
+  <scm>
+    <connection>scm:git:git@github.com:tomitribe/per-destination-ttl.git</connection>
+    <url>scm:git:git@github.com:tomitribe/per-destination-ttl..git</url>
+    <developerConnection>scm:git:git@github.com:tomitribe/per-destination-ttl..git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+
+
   <dependencies>
     <dependency>
       <groupId>org.apache.activemq</groupId>
